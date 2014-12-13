@@ -103,3 +103,13 @@ body {
 	max-width: 100%; /* 100% din primul parinte cu width (.media-left) */
 	height: auto; /* scalat proportional */
 }
+
+.login {
+	margin-left: 26%;
+	margin-top: 25%;
+	border: 3px;
+	margin-left: 4%;
+	padding-left: 24%;
+	padding-top: 1%;
+	overflow: auto;
+}
