@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+  
+  <hr>
+
+  <div class="users">
+  {% for user in users %}
+    <div class="media">
+      <a class="media-left" href="#">
+        <img src="{{ user.profile.avatar_url }}">
+      </a>
+      <div class="media-left">
+        <b>{{ user.username}}</b>
+        <b>{{ user.profile.date_of_birth }}</b>
+      </div>
+        <a class="btn btn-primary btn-add-friend" href="{% url 'add_friends_l' user.pk %}">Add friend</a>
+	
+    </div>
+  {% endfor %}
+  </div>
+ 
+
+{% endblock %}

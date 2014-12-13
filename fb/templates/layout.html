@@ -23,7 +23,8 @@
             <li><a href="{% url 'signup' %}">Sign Up</a></li>
             {% endif%}
           {% if user.is_authenticated %}
-            <li><a href="{% url 'profile' user.username %}">My profile</a></li>
+            <li><a href="{% url 'add_friends_p' %}">Add friends</a></li>
+	    <li><a href="{% url 'profile' user.username %}">My profile</a></li>
             <li><a href="{% url 'logout' %}">Log Out</a></li>
           {% endif %}
           </ul>

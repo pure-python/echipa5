@@ -46,7 +46,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, related_name='profile')
 
-    friends = models.ManyToManyField('self')
+    friends = models.ManyToManyField('self', null=True)
 
     @property
     def avatar_url(self):

@@ -12,11 +12,13 @@ from fb.forms import (
     UserPostForm, UserPostCommentForm, 
     UserLogin, UserProfileForm, UserSignUp,
 )
-
+import datetime
 
 @login_required
 def index(request):
     posts = UserPost.objects.filter(author__profile__in=request.user.profile.friends.all())
+    #import pdb; pdb.set_trace()
+    profiles = request.user.profile.friends.filter(date_of_birth__gt=datetime.datetime.now)
     if request.method == 'GET':
         form = UserPostForm()
     elif request.method == 'POST':
@@ -27,6 +29,7 @@ def index(request):
             post.save()
 
     context = {
+        'profiles': profiles,
         'posts': posts,
         'form': form,
     }
@@ -178,3 +181,21 @@ def like_view(request, pk):
     post.likers.add(request.user)
     post.save()
     return redirect(reverse('post_details', args=[post.pk]))
+
+@login_required
+def add_friends_l(request, pk):
+    friend_profile = UserProfile.objects.get(user__id=pk)
+    user_profile = request.user.profile
+    user_profile.friends.add(friend_profile)
+    user_profile.save()
+    return redirect(reverse('add_friends_p'))
+    
+@login_required    
+def add_friends_p(request):
+    users = User.objects.exclude(pk=request.user.pk).exclude(profile__in=request.user.profile.friends.all())
+    context = {
+	'users': users
+    } 
+    return render(request, 'add_friends.html', context)
+    
+
