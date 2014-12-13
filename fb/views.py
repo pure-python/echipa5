@@ -8,13 +8,16 @@ from django.contrib.auth.models import User
 
 from fb.models import UserPost, UserPostComment, UserProfile
 from fb.forms import (
-    UserPostForm, UserPostCommentForm, UserLogin, UserProfileForm,
+    UserPostForm, UserPostCommentForm, 
+    UserLogin, UserProfileForm, UserSignUp,
 )
-
+import datetime
 
 @login_required
 def index(request):
     posts = UserPost.objects.filter(author__profile__in=request.user.profile.friends.all())
+    #import pdb; pdb.set_trace()
+    profiles = request.user.profile.friends.filter(date_of_birth__gt=datetime.datetime.now)
     if request.method == 'GET':
         form = UserPostForm()
     elif request.method == 'POST':
@@ -25,6 +28,7 @@ def index(request):
             post.save()
 
     context = {
+        'profiles': profiles,
         'posts': posts,
         'form': form,
     }
@@ -56,10 +60,42 @@ def post_details(request, pk):
 
     return render(request, 'post_details.html', context)
 
-"""
+
 def signup_view(request):
     if request.method == 'GET':
-"""
+        signup_form = UserSignUp()
+        context = {
+            'form': signup_form,
+        }
+        return render(request, 'signup.html', context)
+    if request.method == 'POST':
+        form = UserSignUp(request.POST, request.FILES)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            gender = form.cleaned_data['gender']
+            date_of_birth = form.cleaned_data['date_of_birth']
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            email = form.cleaned_data['email']
+            password_doublecheck = form.cleaned_data['confirm_password']
+            avatar = form.cleaned_data['avatar']
+            if password and password != password_doublecheck:
+                raise form.ValidationError("Passwords don't match")
+            new_user = User.objects.create_user(username, email, password)
+            new_profile = UserProfile()
+
+            new_profile = UserProfile.objects.get(user__username=username)
+            new_profile.user.first_name = first_name
+            new_profile.user.last_name = last_name
+            new_profile.user.save()
+
+            new_profile.gender = gender
+            new_profile.date_of_birth = date_of_birth
+            new_profile.avatar = avatar
+            new_profile.save()
+
+        return redirect(reverse('index'))
 
 def login_view(request):
     if request.method == 'GET':
@@ -70,6 +106,7 @@ def login_view(request):
         return render(request, 'login.html', context)
     if request.method == 'POST':
         login_form = UserLogin(request.POST)
+        #try to change to .cleaned data
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)

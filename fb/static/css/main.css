@@ -16,6 +16,10 @@
 	background-color: #c03; 
 }
 
+.navbar > .container {
+	max-width: 899px;
+}
+
 /* logo */
 .navbar-brand {
 	padding-top: 8px;
