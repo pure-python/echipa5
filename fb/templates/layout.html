@@ -20,7 +20,8 @@
           <ul class="nav navbar-nav pull-right">
             <li><a href="{% url 'index' %}">News</a></li>
           {% if user.is_authenticated %}
-            <li><a href="{% url 'profile' user.username %}">My profile</a></li>
+            <li><a href="{% url 'add_friends_p' %}">Add friends</a></li>
+	    <li><a href="{% url 'profile' user.username %}">My profile</a></li>
             <li><a href="{% url 'logout' %}">Log Out</a></li>
           {% endif %}
           </ul>

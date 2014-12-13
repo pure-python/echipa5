@@ -22,4 +22,29 @@
     <a href="{% url 'edit_profile' profile.user.username %}">Edit</a>
   {% endif %}
 
+
+  <h1>Your comments</h1>
+
+
+  <div class="posts">
+  {% for post in posts %}
+    {% if post.author.username = profile.user.username %}
+    <div class="media">
+      <a class="media-left" href="#">
+        <img src="{{ post.author.profile.avatar_url }}">
+      </a>
+      <div class="media-body">
+        <h4 class="media-heading">
+          <a href="{% url 'post_details' post.pk %}">
+          {{ post.text}}
+          </a>
+        </h4>
+        <a href="{% url 'profile' post.author.username %}">
+            <b><small>{{ post.author.username }}</small></b></a>
+        on <b><small>{{ post.date_added }}</small></b>
+      </div>
+    </div>
+    {%endif%} 
+  {% endfor %}
+  </div>
 {% endblock %}
