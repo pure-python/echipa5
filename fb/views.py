@@ -16,9 +16,6 @@ import datetime
 
 @login_required
 def index(request):
-    posts = UserPost.objects.filter(author__profile__in=request.user.profile.friends.all())
-    #import pdb; pdb.set_trace()
-    profiles = request.user.profile.friends.filter(date_of_birth__gt=datetime.datetime.now)
     if request.method == 'GET':
         form = UserPostForm()
     elif request.method == 'POST':
@@ -27,6 +24,8 @@ def index(request):
             text = form.cleaned_data['text']
             post = UserPost(text=text, author=request.user)
             post.save()
+    posts = UserPost.objects.filter(author__profile__in=request.user.profile.friends.all())
+    profiles = request.user.profile.friends.filter(date_of_birth__gt=datetime.datetime.now)
 
     context = {
         'profiles': profiles,
@@ -85,7 +84,6 @@ def signup_view(request):
                 raise ValidationError("Passwords don't match")
             new_user = User.objects.create_user(username, email, password)
             new_profile = UserProfile()
-            new_profile.friends.add(request.user.profile)
 
             new_profile = UserProfile.objects.get(user__username=username)
             new_profile.user.first_name = first_name
