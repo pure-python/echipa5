@@ -130,8 +130,10 @@ def logout_view(request):
 @login_required
 def profile_view(request, user):
     profile = UserProfile.objects.get(user__username=user)
+    posts = UserPost.objects.filter(author=request.user)
     context = {
         'profile': profile,
+        'posts': posts
     }
     return render(request, 'profile.html', context)
 

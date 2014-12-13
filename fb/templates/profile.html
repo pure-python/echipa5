@@ -23,15 +23,14 @@
   {% endif %}
 
 
-  <h1>Your comments</h1>
+  <h1>Your activity</h1>
 
 
   <div class="posts">
   {% for post in posts %}
-    {% if post.author.username = profile.user.username %}
     <div class="media">
       <a class="media-left" href="#">
-        <img src="{{ post.author.profile.avatar_url }}">
+        <img width="100px" src="{{ post.author.profile.avatar_url }}">
       </a>
       <div class="media-body">
         <h4 class="media-heading">
@@ -44,7 +43,6 @@
         on <b><small>{{ post.date_added }}</small></b>
       </div>
     </div>
-    {%endif%} 
   {% endfor %}
   </div>
 {% endblock %}
