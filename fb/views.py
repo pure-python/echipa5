@@ -55,6 +55,10 @@ def post_details(request, pk):
 
     return render(request, 'post_details.html', context)
 
+"""
+def signup_view(request):
+    if request.method == 'GET':
+"""
 
 def login_view(request):
     if request.method == 'GET':
