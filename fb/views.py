@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponseForbidden
+from django.contrib.auth.models import User
 
 from fb.models import UserPost, UserPostComment, UserProfile
 from fb.forms import (
@@ -67,10 +68,11 @@ def signup_view(request):
         date_of_birth = form.cleaned_data['date_of_birth']
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
+        email = form.cleaned_data['email']
         password_doublecheck = form.cleaned_data['password_doublecheck']
         if password and password != password_doublecheck:
             raise forms.ValidationError("Passwords don't match")
-        
+        new_user = User.objects.create_user(username, email, password)
 
 def login_view(request):
     if request.method == 'GET':
