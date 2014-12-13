@@ -67,7 +67,7 @@ def signup_view(request):
         context = {
             'form': signup_form,
         }
-        return render(request, 'login.html', context)
+        return render(request, 'signup.html', context)
     if request.method == 'POST':
         form = UserSignUp(request.POST, request.FILES)
         if form.is_valid():
@@ -78,11 +78,23 @@ def signup_view(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             email = form.cleaned_data['email']
-            password_doublecheck = form.cleaned_data['password_doublecheck']
+            password_doublecheck = form.cleaned_data['confirm_password']
+            avatar = form.cleaned_data['avatar']
             if password and password != password_doublecheck:
-                raise forms.ValidationError("Passwords don't match")
+                raise form.ValidationError("Passwords don't match")
             new_user = User.objects.create_user(username, email, password)
-            return redirect(reverse('index'))
+            new_profile = UserProfile()
+
+            new_profile = UserProfile.objects.get(user__username=username)
+            new_profile.user.first_name = first_name
+            new_profile.user.last_name = last_name
+            new_profile.user.save()
+
+            new_profile.gender = gender
+            new_profile.date_of_birth = date_of_birth
+            new_profile.avatar = avatar
+            new_profile.save()
+
         return redirect(reverse('index'))
 
 def login_view(request):

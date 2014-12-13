@@ -27,7 +27,7 @@ class UserSignUp(Form):
     date_of_birth = DateField( required=False)
     username = CharField(max_length=30)
     password = CharField(widget=PasswordInput)
-    password_doublecheck = CharField(widget=PasswordInput)
+    confirm_password = CharField(widget=PasswordInput)
    # email = EmailField()
     email = CharField(max_length=30)
     avatar = ImageField()
