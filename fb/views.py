@@ -8,7 +8,8 @@ from django.contrib.auth.models import User
 
 from fb.models import UserPost, UserPostComment, UserProfile
 from fb.forms import (
-    UserPostForm, UserPostCommentForm, UserLogin, UserProfileForm,
+    UserPostForm, UserPostCommentForm, 
+    UserLogin, UserProfileForm, UserSignUp,
 )
 
 
@@ -59,20 +60,27 @@ def post_details(request, pk):
 
 def signup_view(request):
     if request.method == 'GET':
+        signup_form = UserSignUp()
+        context = {
+            'form': signup_form,
+        }
         return render(request, 'login.html', context)
     if request.method == 'POST':
-        form = UserSignUpForm(request.POST, request.FILES)
-        first_name = form.cleaned_data['first_name']
-        last_name = form.cleaned_data['last_name']
-        gender = form.cleaned_data['gender']
-        date_of_birth = form.cleaned_data['date_of_birth']
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        email = form.cleaned_data['email']
-        password_doublecheck = form.cleaned_data['password_doublecheck']
-        if password and password != password_doublecheck:
-            raise forms.ValidationError("Passwords don't match")
-        new_user = User.objects.create_user(username, email, password)
+        form = UserSignUp(request.POST, request.FILES)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            gender = form.cleaned_data['gender']
+            date_of_birth = form.cleaned_data['date_of_birth']
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            email = form.cleaned_data['email']
+            password_doublecheck = form.cleaned_data['password_doublecheck']
+            if password and password != password_doublecheck:
+                raise forms.ValidationError("Passwords don't match")
+            new_user = User.objects.create_user(username, email, password)
+            return redirect(reverse('index'))
+        return redirect(reverse('index'))
 
 def login_view(request):
     if request.method == 'GET':
