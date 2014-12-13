@@ -1,6 +1,6 @@
 from django.forms import (
     Form, CharField, Textarea, PasswordInput, ChoiceField, DateField,
-    ImageField,
+    ImageField, EmailField,
 )
 
 from fb.models import UserProfile
@@ -24,10 +24,12 @@ class UserSignUp(Form):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
     gender = ChoiceField(choices=UserProfile.GENDERS)
-    date_of_birth = DateField()
+    date_of_birth = DateField( required=False)
     username = CharField(max_length=30)
     password = CharField(widget=PasswordInput)
     password_doublecheck = CharField(widget=PasswordInput)
+   # email = EmailField()
+    email = CharField(max_length=30)
     avatar = ImageField()
 
 

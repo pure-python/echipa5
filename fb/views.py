@@ -55,10 +55,22 @@ def post_details(request, pk):
 
     return render(request, 'post_details.html', context)
 
-"""
+
 def signup_view(request):
     if request.method == 'GET':
-"""
+        return render(request, 'login.html', context)
+    if request.method == 'POST':
+        form = UserSignUpForm(request.POST, request.FILES)
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        gender = form.cleaned_data['gender']
+        date_of_birth = form.cleaned_data['date_of_birth']
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        password_doublecheck = form.cleaned_data['password_doublecheck']
+        if password and password != password_doublecheck:
+            raise forms.ValidationError("Passwords don't match")
+        
 
 def login_view(request):
     if request.method == 'GET':
@@ -69,6 +81,7 @@ def login_view(request):
         return render(request, 'login.html', context)
     if request.method == 'POST':
         login_form = UserLogin(request.POST)
+        #try to change to .cleaned data
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
