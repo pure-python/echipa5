@@ -85,6 +85,7 @@ def signup_view(request):
                 raise ValidationError("Passwords don't match")
             new_user = User.objects.create_user(username, email, password)
             new_profile = UserProfile()
+            new_profile.friends.add(request.user.profile)
 
             new_profile = UserProfile.objects.get(user__username=username)
             new_profile.user.first_name = first_name
