@@ -11,11 +11,13 @@ from fb.forms import (
     UserPostForm, UserPostCommentForm, 
     UserLogin, UserProfileForm, UserSignUp,
 )
-
+import datetime
 
 @login_required
 def index(request):
     posts = UserPost.objects.filter(author__profile__in=request.user.profile.friends.all())
+    #import pdb; pdb.set_trace()
+    profiles = request.user.profile.friends.filter(date_of_birth__gt=datetime.datetime.now)
     if request.method == 'GET':
         form = UserPostForm()
     elif request.method == 'POST':
@@ -26,6 +28,7 @@ def index(request):
             post.save()
 
     context = {
+        'profiles': profiles,
         'posts': posts,
         'form': form,
     }
