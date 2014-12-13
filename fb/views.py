@@ -13,7 +13,7 @@ from fb.forms import (
 
 @login_required
 def index(request):
-    posts = UserPost.objects.all()
+    posts = UserPost.objects.filter(author__profile__in=request.user.profile.friends.all())
     if request.method == 'GET':
         form = UserPostForm()
     elif request.method == 'POST':
