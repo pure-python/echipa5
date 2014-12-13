@@ -24,7 +24,7 @@ class UserSignUp(Form):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
     gender = ChoiceField(choices=UserProfile.GENDERS)
-    date_of_birth = DateField( required=False)
+    date_of_birth = DateField(input_formats=["%d.%m.%Y"], required=False)
     username = CharField(max_length=30)
     password = CharField(widget=PasswordInput)
     confirm_password = CharField(widget=PasswordInput)
